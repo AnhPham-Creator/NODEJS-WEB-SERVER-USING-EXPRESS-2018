@@ -1,5 +1,5 @@
 {
-  "name": "bai1setup",
+  "name": "testsocket",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,10 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
-    "lowdb": "^1.0.0",
-    "pug": "^2.0.4"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.2",
+    "socket.io": "^2.3.0"
   }
 }

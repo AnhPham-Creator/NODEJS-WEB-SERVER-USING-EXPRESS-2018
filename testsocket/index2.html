@@ -1,0 +1,16 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+<script>
+    var chat = io.connect('/chat')
+      , news = io.connect('/news');
+    
+    chat.on('a message', function (data) {
+        console.log('da connect');
+        console.log(data)
+      chat.emit('hi!', { hi: 'hi'});
+    });
+    
+    news.on('item', function (data) {
+      console.log(data);
+      news.emit('woot', { key: 'root' });
+    });
+  </script>

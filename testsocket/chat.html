@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>Hello world</title>
+   </head>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+   
+   <script>
+      var socket = io();
+      var user;
+      function setUsername() {
+          var name = document.getElementById("name").value;
+          socket.emit('setUsername', name);
+      }
+      function showformMessage() {
+        document.getElementById('container').innerHTML = '<input type = "text" id = "message">\
+        <button type = "button" name = "button" onclick = "leavesRoom()">leaves room</button>\
+        <button type = "button" name = "button" onclick = "sendMessage()">Send</button>\
+        <div id = "message-container"></div>';
+      }
+      function loadformJoinRoom() {
+          document.getElementById('container').innerHTML = '<input type = "text" name = "name" id="name" placeholder = "Enter your name!">\
+        <button type = "button" name = "button" onclick = "setUsername()">Join rooms chat!</button>';
+      }
+      function sendMessage() {
+         var msg = document.getElementById('message').value;
+         if(msg) {
+            socket.emit('msg', {message: msg, user: user});
+         }
+      }
+
+      function leavesRoom() {
+        socket.emit('leaveroom', {
+            user: user
+        })
+      }
+      
+      socket.on('connect', function(){
+        loadformJoinRoom();
+      });
+      socket.on('userExists', function(data) {
+         document.getElementById('error-container').innerHTML = data;
+      });
+      socket.on('userSet', function(data) {
+        user = data.username;
+        showformMessage();
+      });
+      socket.on('newmsg', function(data) {
+         if(user) {
+            document.getElementById('message-container').innerHTML += '<div><b>' + 
+               data.user + '</b>: ' + data.message + '</div>'
+         }
+      })
+
+      socket.on('connectToRoom',function(data) {
+         document.getElementById('notification').innerHTML = data.username+' join room';
+      });
+      socket.on('leaveroom', function() {
+        loadformJoinRoom();
+      })
+      socket.on('notifileaveroom',function(data) {
+         document.getElementById('notification').innerHTML = data+' leaves room';        
+      });
+   </script>
+   <body>
+      <div id = "error-container"></div>
+      <div id = "notification"></div>
+      <div id = "container">
+       
+      </div>
+</html>
